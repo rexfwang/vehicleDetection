@@ -1,6 +1,44 @@
 # Intro
-In this project, I implemented two vehicle detectors using SVM with HOG (histogram of oriented gradient) and CNN on gti vehicle dataset (https://www.gti.ssr.upm.es/data/Vehicle_database.html) and data from Udacity. I train the SVM model with HOG feature, and CNN using with the raw image. In the target image, I use sliding window to go through different region of interest and use the model to predict if there's a vehicle within the window. After going through the whole image, a heatmap is generated and thresholded to generate the final bounding boxes of vehicles.
+In this project, I implemented two vehicle detectors using SVM with HOG (histogram of oriented gradients) and CNN on data from Udacity and GTI dataset. I used the dataset to train the classifiers, which is then used to detect vehicles from images and video.
 
-For video, besides generating heatmap for each frame, I applied IIR filter to heatmaps to stablize the result. The bouding boxes are generated based on filtered heatmap. Averaging 5 or 10 frames can also stablize the output but perform worse.   
+# Training Data
+There are 3425 vehicle images and 3900 non-vehicle images. Each image has resolution of 64 x 64, and 3 channels (RGB). Here are examples of training data:
 
-This project uses Scikit-learn for HOG feature and SVM model. It also uses TensorFlow with Keras API for simple CNN model. OpenCV is used for image processing.
+![vehicle 1](img/v1.png)
+![vehicle 2](img/v2.png)
+![vehicle 3](img/v3.png)
+![vehicle 4](img/v4.png)
+![vehicle 5](img/v5.png)
+
+![non-vehicle 1](img/nonV1.png)
+![non-vehicle 2](img/nonV2.png)
+![non-vehicle 3](img/nonV3.png)
+![non-vehicle 4](img/nonV4.png)
+![non-vehicle 5](img/nonV5.png)
+
+# Features
+HOG (https://en.wikipedia.org/wiki/Histogram_of_oriented_gradients) is used with linear SVM, and raw images are used as input to CNN directly.
+
+# Training
+- Load training data and apply standard noramlization (zero mean and unit variance.) 
+- Images are transfered into HOG feature vectors for SVM classifier.
+- Split the training data into training set and validation set (80%:20%).
+- I used linearSVM from scikit-learn and built a simple 2 conv layers CNN model using Keras with TensorFlow. Both of the classifiers reach 97% accuracy on validation set, and almost 100% accuracy on training set.
+
+# Detecion
+* A sliding window mechanism is used to generate regions of interest. It slides through the input image and feeds the region into classifier. There are 3 to 4 different scales of sliding windows.
+* If classifier predicts there's a vehicle within the window, it marks the pixels in a heatmap. The heatmap is a map to record how many times each pixel has been predicted as a vehicle. Here are examples of the process:
+![input_image](img/test1.jpg)
+![boxes](img/boxes.png)
+![heatmap](img/heatmap.png)
+* After generating the heatmap, it applies a threshold to eliminate outliers, and that generates the final heatmap.
+* The heatmap is then passed into connected component algorithm and that generates labels for each blobs.
+* Finally, it calculates the bounding box of each blob and outputs the coordinates of the boxes. Here are examples of the process:
+![filtered_heatmap](img/heatmap_filtered.png)
+![output](img/result.png)
+* For video, besides generating heatmap for each frame, IIR filter is applied to heatmaps to stablize the final output. I also tried averaging 5 or 10 frames to stablize the outpu, but it performs worse.   
+
+# Final result
+## Images:
+![output](img/result1.png)
+
