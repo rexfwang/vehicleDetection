@@ -38,7 +38,14 @@ HOG (https://en.wikipedia.org/wiki/Histogram_of_oriented_gradients) is used with
 ![output](img/result.png)
 * For video, besides generating heatmap for each frame, IIR filter is applied to heatmaps to stablize the final output. I also tried averaging 5 or 10 frames to stablize the outpu, but it performs worse.   
 
-# Final result
-## Images:
+# Sample result
 ![output](img/result1.png)
+![output](img/result3.png)
+![output](img/result4.png)
 
+# Final thoughts
+* There is a high false positive rate for both CNN and SVM model. Given that both models reach almost 100% accuracy, this is likely caused by training data doesn't represent the real scenario problem. ~6000 images are also small for a dataset.
+* Heatmap threashold and IIR filter or averaging frames help, but won't solve the issue entirely.
+* Sliding window is very computational intensive. A region selection algorithm can be used (such as selective search) to achieve higher efficiency.
+* RCNN, fast-RCNN, YOLO are all much more efficient than sliding window.
+* Kalman-filter should be used for tracking.
