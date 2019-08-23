@@ -35,13 +35,18 @@ HOG (https://en.wikipedia.org/wiki/Histogram_of_oriented_gradients) is used with
 * The heatmap is then passed into connected component algorithm and that generates labels for each blobs.
 * Finally, it calculates the bounding box of each blob and outputs the coordinates of the boxes. Here are examples of the process:
 ![filtered_heatmap](img/heatmap_filtered.png)
-![output](img/result.png)
+![output](img/result1.png)
 * For video, besides generating heatmap for each frame, IIR filter is applied to heatmaps to stablize the final output. I also tried averaging 5 or 10 frames to stablize the outpu, but it performs worse.   
 
 # Sample result
-![output](img/result1.png)
-![output](img/result4.png)
-![output](img/result3.png)
+![image1](img/result1.png)
+![image2](img/result4.png)
+![image3](img/result5.png)
+![image4](img/result3.png)
+
+[video from CNN with IIR filter](test_video_cnn.mp4)
+
+[video from SVM with IIR filter](test_video_svm_iir.mp4)
 
 # Final thoughts
 * There is a high false positive rate for both CNN and SVM model. Given that both models reach almost 100% accuracy, this is likely caused by training data doesn't represent the real scenario problem. ~6000 images are also small for a dataset.
